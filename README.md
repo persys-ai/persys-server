@@ -1,6 +1,8 @@
 # persys-server
 Persys server. All services you need to run Persys locally.
 
+Refer to the [main](https://github.com/persys-ai/persys) repo for contributions and other instructions.
+
 This README is a work in progress, more instructions to come.
 There will be a docker image too, if you create one based on this repo, open a pull request.
 
