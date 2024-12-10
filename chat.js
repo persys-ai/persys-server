@@ -7,10 +7,10 @@ const baseDir=envData['baseDir'];
 const modelV=envData['modelV'];
 const chatDir=baseDir+'/chat';
 const limiter=-4;
-const tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));
 
 const peerServer=p.PeerServer({port:9000,path:"/chat"});
 peerServer.on('connection',(client) => {
+    const tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));
     if(client.id && tokens.findIndex(x=>x.t===client.id)>-1) {
         let chats=JSON.parse(fs.readFileSync(chatDir+'/chats.json'));
         let chatSession=chats[chats.findIndex(x=>x.active===1)];

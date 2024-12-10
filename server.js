@@ -911,7 +911,7 @@ const server = http.createServer((req, res)=>{
                 else if(req.url.split('/')[2]==='restart-services') {
                     exec('sh restart.sh',(err,stdout,stderr)=>{
                         r.data='restarted';
-                        res.writeHead(200, {'Content-Type': 'application/json'});
+                        res.writeHead(200,{'Content-Type':'application/json'});
                         res.write(JSON.stringify(r));
                         return res.end();
                     });
@@ -1424,29 +1424,59 @@ const server = http.createServer((req, res)=>{
                     });
                     req.on('end',()=>{
                         let payload=JSON.parse(body);
-                        let convert=fromPath(payload.path, {density:100, saveFilename:payload.name, savePath:tempDir, format:"png", width:1000, preserveAspectRatio:true});
-                        convert(payload.page,{responseType:"image"})
-                            .then((resolve) => {
-                                tesseract.recognize(tempDir+'/'+resolve.name, {lang: "eng", oem: 1, psm: 3,})
-                                    .then((text) => {
-                                        r.data=text;
-                                        res.writeHead(200,{'Content-Type':'application/json'});
-                                        res.write(JSON.stringify(r));
-                                        return res.end();
-                                    })
-                                    .catch((error) => {
-                                        r.error=error;
-                                        res.writeHead(200,{'Content-Type':'application/json'});
-                                        res.write(JSON.stringify(r));
-                                        return res.end();
-                                    });
-                            })
-                            .catch((err)=>{
-                                r.error=err;
+                        if(fs.existsSync(tempDir+'/'+payload.name+'.'+payload.page+'.txt')) {
+                            fs.readFile(tempDir+'/'+payload.name+'.'+payload.page+'.txt',(err,content)=>{
+                                if(!err) r.data=new Buffer(content).toString();
+                                else r.err=err;
                                 res.writeHead(200,{'Content-Type':'application/json'});
                                 res.write(JSON.stringify(r));
                                 return res.end();
                             });
+                        }
+                        else if(fs.existsSync(tempDir+'/'+payload.name+'.'+payload.page+'.png')) {
+                            tesseract.recognize(tempDir+'/'+payload.name+'.'+payload.page+'.png',{lang:"eng",oem:1,psm:3,})
+                                .then((text)=>{
+                                    fs.writeFile(tempDir+'/'+payload.name+'.'+payload.page+'.txt',text,(err)=>{
+                                        r.data=text;
+                                        res.writeHead(200,{'Content-Type':'application/json'});
+                                        res.write(JSON.stringify(r));
+                                        return res.end();
+                                    });
+                                })
+                                .catch((error) => {
+                                    r.error=error;
+                                    res.writeHead(200,{'Content-Type':'application/json'});
+                                    res.write(JSON.stringify(r));
+                                    return res.end();
+                                });
+                        }
+                        else {
+                            let convert=fromPath(payload.path, {density:100, saveFilename:payload.name, savePath:tempDir, format:"png", width:1000, preserveAspectRatio:true});
+                            convert(payload.page,{responseType:"image"})
+                                .then((resolve) => {
+                                    tesseract.recognize(tempDir+'/'+resolve.name, {lang: "eng", oem: 1, psm: 3,})
+                                        .then((text) => {
+                                            fs.writeFile(tempDir+'/'+payload.name+'.'+payload.page+'.txt',text,(err)=>{
+                                                r.data=text;
+                                                res.writeHead(200,{'Content-Type':'application/json'});
+                                                res.write(JSON.stringify(r));
+                                                return res.end();
+                                            });
+                                        })
+                                        .catch((error) => {
+                                            r.error=error;
+                                            res.writeHead(200,{'Content-Type':'application/json'});
+                                            res.write(JSON.stringify(r));
+                                            return res.end();
+                                        });
+                                })
+                                .catch((err)=>{
+                                    r.error=err;
+                                    res.writeHead(200,{'Content-Type':'application/json'});
+                                    res.write(JSON.stringify(r));
+                                    return res.end();
+                                });
+                        }
                     });
                 }
                 else if(req.url.split('/')[2]==='pages') {

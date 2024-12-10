@@ -9,12 +9,14 @@ const baseDir=envData['baseDir'];
 const modelV=envData['modelV'];
 const embedModel=envData['embedModel'];
 const embeddingsDir=baseDir+'/embeddings';
-const tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));
 
 const chroma=new ChromaClient({path:"http://localhost:8000"});
 const peerServer=p.PeerServer({port:7000,path:"/rag"});
 peerServer.on('connection',(client)=>{
+    console.log('opened');
+    const tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));
     if(client.id && tokens.findIndex(x=>x.t===client.id)>-1) {
+        console.log('authenticated');
         let reply='';
         //
         let settings=JSON.parse(fs.readFileSync(embeddingsDir+'/embeddings.json'));
@@ -23,6 +25,7 @@ peerServer.on('connection',(client)=>{
         let prompt=embeddingPayload.prompt;
         //
         async function createCollection() {
+            //await chroma.reset()
             return await chroma.createCollection({name:uuidv4()});
         }
         createCollection().then(collection=>{
@@ -48,21 +51,23 @@ peerServer.on('connection',(client)=>{
                             nResults:1
                         });
                     }
-                    query().then(queryData=>{
-                        ollama.generate({model:modelV,prompt:"Using this data: "+queryData['documents'][0][0]+". Respond to this prompt: "+prompt,stream:true}).then(
-                            async(stream)=>{
-                                for await(const chunk of stream) {
-                                    console.log(chunk.response);
-                                    reply=reply+chunk.response;
-                                    client.send({content:chunk.response,done:chunk.done});
-                                    // save history
-                                    if(chunk.done) {
-                                        console.log(reply);
+                    query()
+                        .then(queryData=>{
+                            ollama.generate({model:modelV,prompt:"Using this data: "+queryData['documents'][0][0]+". Respond to this prompt: "+prompt,stream:true}).then(
+                                async(stream)=>{
+                                    for await(const chunk of stream) {
+                                        reply=reply+chunk.response;
+                                        client.send({content:chunk.response,done:chunk.done});
+                                        // save history
+                                        if(chunk.done) {
+                                        }
                                     }
                                 }
-                            }
-                        );
-                    });
+                            );
+                        })
+                        .catch((err)=>{
+                            console.log(err);
+                        });
                     //
                 });
                 //
