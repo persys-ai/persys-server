@@ -1,16 +1,18 @@
-import ollama from "ollama";
+import {Ollama} from "ollama";
 import * as p from "peer";
 import fs from "fs";
 import {ChromaClient} from "chromadb";
 import {v4 as uuidv4} from 'uuid';
 
 const envData=JSON.parse(fs.readFileSync('env.json'));
+const host=envData['host'];
 const baseDir=envData['baseDir'];
 const modelV=envData['modelV'];
 const embedModel=envData['embedModel'];
 const embeddingsDir=baseDir+'/embeddings';
 
-const chroma=new ChromaClient({path:"http://localhost:8000"});
+const ollama=new Ollama({host:'http://'+host+':11434'});
+const chroma=new ChromaClient({path:"http://"+host+":6000"});
 const peerServer=p.PeerServer({port:7000,path:"/rag"});
 peerServer.on('connection',(client)=>{
     console.log('opened');

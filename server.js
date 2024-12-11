@@ -3,7 +3,7 @@ import url from "url";
 import fs from "fs";
 import path from "path";
 import os from "os";
-import ollama from "ollama";
+import {Ollama} from "ollama";
 import formidable from "formidable";
 import mime from "mime";
 import {v4 as uuidv4} from 'uuid';
@@ -55,6 +55,7 @@ const server = http.createServer((req, res)=>{
     else {
         let tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));
         if((req.headers['public-token'] && tokens.findIndex(x=>x.t===req.headers['public-token'])>-1) || (s.get('publicToken') && tokens.findIndex(x=>x.t===s.get('publicToken'))>-1)) {
+            const host=envData['host'];
             let modelV=envData['modelV'];
             let embedModel=envData['embedModel'];
             //
@@ -98,6 +99,9 @@ const server = http.createServer((req, res)=>{
             if(!fs.existsSync(appsDir+'/cardclip.json') || fs.readFileSync(appsDir+'/cardclip.json')==='') fs.writeFile(appsDir+'/cardclip.json',JSON.stringify([{id:'default',firstName:'Persys Support',lastName:'', phone:'', email:'support@persys.ai',thumb:false}]),()=>{});
             if(!fs.existsSync(appsDir+'/cardclip')) fs.mkdirSync(appsDir+'/cardclip');
             if(!fs.existsSync(appsDir+'/paper')) fs.mkdirSync(appsDir+'/paper');
+            //
+            //
+            const ollama=new Ollama({host:'http://'+host+':11434'});
             //
             //
             if(req.url.split('/')[1]==='sessions') {

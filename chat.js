@@ -1,13 +1,15 @@
-import ollama from "ollama";
+import {Ollama} from "ollama";
 import * as p from "peer";
 import fs from "fs";
 
 const envData=JSON.parse(fs.readFileSync('env.json'));
+const host=envData['host'];
 const baseDir=envData['baseDir'];
 const modelV=envData['modelV'];
 const chatDir=baseDir+'/chat';
 const limiter=-4;
 
+const ollama=new Ollama({host:'http://'+host+':11434'});
 const peerServer=p.PeerServer({port:9000,path:"/chat"});
 peerServer.on('connection',(client) => {
     const tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));
