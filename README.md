@@ -29,9 +29,8 @@ docker run -d -p 3000:3000 -p 4000:4000 -p 7000:7000 -p 9000:9000 --mount type=b
 If you do not have Chromadb installed
 ```
 docker pull chromadb/chroma
-docker run -d -p 6000:8000 --name chroma_img chromadb/chroma
+docker run -d -p 8000:8000 --name chroma_img chromadb/chroma
 ```
-If you do have it installed, run chromadb on port 6000 instead of default 8000. Alternatively, change `rag.js` Chroma host to `8000`.
 
 
 If you do not have Ollama installed

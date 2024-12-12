@@ -12,13 +12,11 @@ const embedModel=envData['embedModel'];
 const embeddingsDir=baseDir+'/embeddings';
 
 const ollama=new Ollama({host:'http://'+host+':11434'});
-const chroma=new ChromaClient({path:"http://"+host+":6000"});
+const chroma=new ChromaClient({path:"http://"+host+":8000"});
 const peerServer=p.PeerServer({port:7000,path:"/rag"});
 peerServer.on('connection',(client)=>{
-    console.log('opened');
     const tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));
     if(client.id && tokens.findIndex(x=>x.t===client.id)>-1) {
-        console.log('authenticated');
         let reply='';
         //
         let settings=JSON.parse(fs.readFileSync(embeddingsDir+'/embeddings.json'));

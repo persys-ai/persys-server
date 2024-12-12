@@ -65,6 +65,7 @@ const server = http.createServer((req, res)=>{
             let embeddingsDir=baseDir+'/embeddings';
             let settingsDir=baseDir+'/settings';
             let firmwareDir=baseDir+'/firmware';
+            let logsDir=baseDir+'/logs';
             let appsDir=baseDir+'/apps';
             //
             if(!fs.existsSync(baseDir)) fs.mkdirSync(baseDir);
@@ -92,6 +93,8 @@ const server = http.createServer((req, res)=>{
             //
             // firmware update dir
             if(!fs.existsSync(firmwareDir)) fs.mkdirSync(firmwareDir);
+            // logs dir
+            if(!fs.existsSync(logsDir)) fs.mkdirSync(logsDir);
             //
             // apps dir
             if(!fs.existsSync(appsDir)) fs.mkdirSync(appsDir);
