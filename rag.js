@@ -3,12 +3,15 @@ import * as p from "peer";
 import fs from "fs";
 import {ChromaClient} from "chromadb";
 import {v4 as uuidv4} from 'uuid';
+import { config, validateConfig } from './config/env.js';
 
-const envData=JSON.parse(fs.readFileSync('env.json'));
-const host=envData['host'];
-const baseDir=envData['baseDir'];
-const modelV=envData['modelV'];
-const embedModel=envData['embedModel'];
+validateConfig();
+
+
+const host=config.host;
+const baseDir=config.baseDir
+const modelV=config.modelV;
+const embedModel=config.embedModel;
 const embeddingsDir=baseDir+'/embeddings';
 
 const ollama=new Ollama({host:'http://'+host+':11434'});
