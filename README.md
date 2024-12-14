@@ -3,6 +3,8 @@ Persys server. All services you need to run Persys locally.
 
 Refer to the [main](https://github.com/persys-ai/persys) repo for contributions and other instructions.
 
+This README is a work in progress, more instructions to come.
+
 ## Environment Setup
 
 1. Copy the example environment file to create your local configuration:
@@ -13,7 +15,7 @@ cp .env.example .env
 2. Configure the following environment variables in your `.env` file:
 - `BASE_DIR`: Base directory for data storage (e.g., /data)
 - `HOST`: Host address (default: localhost)
-- `MODEL_V`: Model version (default: llama2)
+- `MODEL_V`: Model version (default: llama3.2:3b)
 - `EMBED_MODEL`: Embedding model name (default: nomic-embed-text)
 - `PORT`: Server port (default: 3000)
 
