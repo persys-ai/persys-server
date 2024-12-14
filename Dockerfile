@@ -17,7 +17,7 @@ COPY . .
 # environment variables
 ENV BASE_DIR=/data \
     HOST=localhost \
-    MODEL_V=llama2 \
+    MODEL_V=llama3.2:3b \
     EMBED_MODEL=nomic-embed-text \
     PORT=3000
 
