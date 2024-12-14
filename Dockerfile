@@ -14,6 +14,13 @@ RUN npm install pm2 -g
 # copy persys
 COPY . .
 
+# environment variables
+ENV BASE_DIR=/data \
+    HOST=localhost \
+    MODEL_V=llama2 \
+    EMBED_MODEL=nomic-embed-text \
+    PORT=3000
+
 # install persys
 RUN npm install
 

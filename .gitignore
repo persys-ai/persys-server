@@ -6,3 +6,5 @@ out.log
 update.sh
 wifi.py
 install.sh
+env.json
+.env

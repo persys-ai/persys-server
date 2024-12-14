@@ -15,10 +15,12 @@ import { exec } from 'child_process';
 import tesseract from "node-tesseract-ocr";
 import { fromPath } from "pdf2pic";
 import pdf from 'pdf-page-counter';
+import { config, validateConfig } from './config/env.js';
+
+validateConfig();
 
 const server = http.createServer((req, res)=>{
-    const envData=JSON.parse(fs.readFileSync('env.json'));
-    const baseDir=envData['baseDir'];
+    const baseDir=config.baseDir;
     const saltRounds=10;
     let body = '';
     let r={error:'',data:''}
@@ -55,9 +57,9 @@ const server = http.createServer((req, res)=>{
     else {
         let tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));
         if((req.headers['public-token'] && tokens.findIndex(x=>x.t===req.headers['public-token'])>-1) || (s.get('publicToken') && tokens.findIndex(x=>x.t===s.get('publicToken'))>-1)) {
-            const host=envData['host'];
-            let modelV=envData['modelV'];
-            let embedModel=envData['embedModel'];
+            const host=config.host;
+            let modelV=config.modelV;
+            let embedModel=config.embedModel;
             //
             let chatDir=baseDir+'/chat';
             let filesDir=baseDir+'/files';
