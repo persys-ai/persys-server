@@ -1,11 +1,13 @@
 import {Ollama} from "ollama";
 import * as p from "peer";
 import fs from "fs";
+import { config, validateConfig } from './config/env.js';
 
-const envData=JSON.parse(fs.readFileSync('env.json'));
-const host=envData['host'];
-const baseDir=envData['baseDir'];
-const modelV=envData['modelV'];
+validateConfig();
+
+const host=config.host;
+const baseDir=config.baseDir;
+const modelV=config.modelV;
 const chatDir=baseDir+'/chat';
 const limiter=-4;
 
