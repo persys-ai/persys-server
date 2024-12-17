@@ -9,13 +9,16 @@ validateConfig();
 
 
 const host=config.host;
-const baseDir=config.baseDir
+const baseDir=config.baseDir;
 const modelV=config.modelV;
 const embedModel=config.embedModel;
+var chromaHost=config.chromaHost;
+var chromaPort=config.chromaPort;
 const embeddingsDir=baseDir+'/embeddings';
 
 const ollama=new Ollama({host:'http://'+host+':11434'});
-const chroma=new ChromaClient({path:"http://"+host+":8000"});
+console.log(chromaHost, chromaPort);
+const chroma=new ChromaClient({path:"http://" + chromaHost + ":" + chromaPort});
 const peerServer=p.PeerServer({port:7000,path:"/rag"});
 peerServer.on('connection',(client)=>{
     const tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));

@@ -15,7 +15,7 @@ import { exec } from 'child_process';
 import tesseract from "node-tesseract-ocr";
 import { fromPath } from "pdf2pic";
 import pdf from 'pdf-page-counter';
-import { config, validateConfig } from './config/env.js';
+import { config, validateConfig, setConfig } from './config/env.js';
 
 validateConfig();
 
@@ -819,8 +819,7 @@ const server = http.createServer((req, res)=>{
                         create()
                             .then(()=>{
                             if(payload.details.family==='llama') {
-                                let newEnvData=envData;
-                                newEnvData.modelV=payload.name;
+                                setConfig({modelV: payload.name});
                                 fs.writeFile('env.json',JSON.stringify(newEnvData),(err)=>{
                                     if(!err) r.data='started';
                                     else r.error='error starting';

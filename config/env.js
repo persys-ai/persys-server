@@ -4,17 +4,19 @@ import path from 'path';
 // Load .env file
 dotenv.config();
 
-const config = {
+var config = {
   baseDir: process.env.BASE_DIR || '/data',
   host: process.env.HOST || 'localhost',
-  modelV: process.env.MODEL_V || 'llama2',
+  modelV: process.env.MODEL_V || 'llama3.2:3b',
   embedModel: process.env.EMBED_MODEL || 'nomic-embed-text',
-  port: parseInt(process.env.PORT, 10) || 3000
+  port: parseInt(process.env.PORT, 10) || 3000,
+  chromaHost: process.env.CHROMA_HOST || 'localhost',
+  chromaPort: parseInt(process.env.CHROMA_PORT, 10) || 8000,
 };
 
 // Create a function to validate required env vars
 const validateConfig = () => {
-  const required = ['BASE_DIR', 'HOST'];
+  const required = ['BASE_DIR', 'HOST', 'MODEL_V', 'EMBED_MODEL', 'PORT'];
   const missing = required.filter(key => !process.env[key]);
   
   if (missing.length > 0) {
@@ -22,4 +24,8 @@ const validateConfig = () => {
   }
 };
 
-export { config, validateConfig };
+const setConfig = (newConfig) => {
+  config = { ...config, ...newConfig };
+}
+
+export { config, validateConfig, setConfig };
