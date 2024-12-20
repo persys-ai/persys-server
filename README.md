@@ -44,6 +44,9 @@ Compose file using target file `-f` found inside the cloned repo `persys-server`
 The compose file will run the following images: `persys-server`, `ollama/ollama` and `chromadb/chroma`.
 If you're already running Ollama and/or ChromaDB, you can use just run the `persys-server` Docker image instead using the provided Dockerfile.
 The `compose.yaml` file will use the `.env` file you copied from the Environments section above.
+
+**Important**: Before you use the `docker compose` command, modify the `compose.yaml` file with your `/path/to/data` directory for the `persys-server` service.
+
 ```bash
 docker compose -f persys-server/compose.yaml up -d
 ```
