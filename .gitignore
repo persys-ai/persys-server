@@ -1,8 +1,9 @@
+.idea/
 node_modules/
-about.json
 persys-pub-100.pem
 device.stl
-out.log
-update.sh
-wifi.py
 install.sh
+env.json
+.env
+wifi.py
+update.sh

@@ -1,0 +1,30 @@
+services:
+
+  ollama:
+    image: ollama/ollama
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+
+  chromadb:
+    image: chromadb/chroma
+    restart: always
+    ports:
+      - "8000:8000"
+
+  persys:
+    image: persys-server
+    restart: always
+    ports:
+      - "3000:3000"
+      - "4000:4000"
+      - "7000:7000"
+      - "9000:9000"
+    volumes:
+      - /Users/aman/Documents/Data:/data
+    env_file: .env
+
+volumes:
+  ollama: {}

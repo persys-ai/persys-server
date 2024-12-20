@@ -2,9 +2,11 @@ import * as p from "peer";
 import fs from "fs";
 import disk from "diskusage";
 import osUtils from 'os-utils';
+import { config, validateConfig } from './config/env.js';
 
-const envData=JSON.parse(fs.readFileSync('env.json'));
-const baseDir=envData['baseDir'];
+validateConfig();
+
+const baseDir=config.baseDir;
 const peerServer=p.PeerServer({port:4000,path:"/stats"});
 
 peerServer.on('connection',(client) => {
