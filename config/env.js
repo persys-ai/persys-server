@@ -12,6 +12,10 @@ var config = {
   port: parseInt(process.env.PORT, 10) || 3000,
   chromaHost: process.env.CHROMA_HOST || 'localhost',
   chromaPort: parseInt(process.env.CHROMA_PORT, 10) || 8000,
+  deviceName:process.env.DEVICE_NAME || 'my-device',
+  serialNumber:process.env.SERIAL_NUMBER || 'device-serial-no',
+  publicKeyV:process.env.PUBLIC_KEY_VERSION || 'persys-pub-100.pem',
+  firmwareVersion:process.env.FIRMWARE_VERSION || '1.0.1'
 };
 
 // Create a function to validate required env vars

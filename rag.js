@@ -12,12 +12,11 @@ const host=config.host;
 const baseDir=config.baseDir;
 const modelV=config.modelV;
 const embedModel=config.embedModel;
-var chromaHost=config.chromaHost;
-var chromaPort=config.chromaPort;
+const chromaHost=config.chromaHost;
+const chromaPort=config.chromaPort;
 const embeddingsDir=baseDir+'/embeddings';
 
 const ollama=new Ollama({host:'http://'+host+':11434'});
-console.log(chromaHost, chromaPort);
 const chroma=new ChromaClient({path:"http://" + chromaHost + ":" + chromaPort});
 const peerServer=p.PeerServer({port:7000,path:"/rag"});
 peerServer.on('connection',(client)=>{

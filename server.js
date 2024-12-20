@@ -58,17 +58,20 @@ const server = http.createServer((req, res)=>{
         let tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));
         if((req.headers['public-token'] && tokens.findIndex(x=>x.t===req.headers['public-token'])>-1) || (s.get('publicToken') && tokens.findIndex(x=>x.t===s.get('publicToken'))>-1)) {
             const host=config.host;
-            let modelV=config.modelV;
-            let embedModel=config.embedModel;
+            const modelV=config.modelV;
+            const embedModel=config.embedModel;
             //
-            let chatDir=baseDir+'/chat';
-            let filesDir=baseDir+'/files';
-            let tempDir=baseDir+'/temp';
-            let embeddingsDir=baseDir+'/embeddings';
-            let settingsDir=baseDir+'/settings';
-            let firmwareDir=baseDir+'/firmware';
-            let logsDir=baseDir+'/logs';
-            let appsDir=baseDir+'/apps';
+            const chatDir=baseDir+'/chat';
+            const filesDir=baseDir+'/files';
+            const tempDir=baseDir+'/temp';
+            const embeddingsDir=baseDir+'/embeddings';
+            const settingsDir=baseDir+'/settings';
+            const firmwareDir=baseDir+'/firmware';
+            const logsDir=baseDir+'/logs';
+            const appsDir=baseDir+'/apps';
+            //
+            const ollama=new Ollama({host:'http://'+host+':11434'});
+            //
             //
             if(!fs.existsSync(baseDir)) fs.mkdirSync(baseDir);
             //
@@ -105,8 +108,6 @@ const server = http.createServer((req, res)=>{
             if(!fs.existsSync(appsDir+'/cardclip')) fs.mkdirSync(appsDir+'/cardclip');
             if(!fs.existsSync(appsDir+'/paper')) fs.mkdirSync(appsDir+'/paper');
             //
-            //
-            const ollama=new Ollama({host:'http://'+host+':11434'});
             //
             //
             if(req.url.split('/')[1]==='sessions') {
@@ -161,9 +162,11 @@ const server = http.createServer((req, res)=>{
             //
             // about
             if(req.url.split('/')[1]==='about') {
-                let about=JSON.parse(fs.readFileSync('about.json'));
-                about.firmwareVersion=JSON.parse(fs.readFileSync('version.json')).version;
-                r.data=about;
+                r.data={
+                    deviceName:config.deviceName,
+                    serialNumber:config.serialNumber,
+                    firmwareVersion:config.firmwareVersion
+                };
                 res.writeHead(200,{'Content-Type':'application/json'});
                 res.write(JSON.stringify(r));
                 return res.end();
@@ -793,7 +796,7 @@ const server = http.createServer((req, res)=>{
                     });
                     req.on('end',()=>{
                         let payload=JSON.parse(body);
-                        exec('ollama stop '+payload.name);
+                        //exec('ollama stop '+payload.name);
                         res.writeHead(200,{'Content-Type': 'application/json'});
                         r.data='stopped';
                         res.write(JSON.stringify(r));
@@ -820,13 +823,10 @@ const server = http.createServer((req, res)=>{
                             .then(()=>{
                             if(payload.details.family==='llama') {
                                 setConfig({modelV: payload.name});
-                                fs.writeFile('env.json',JSON.stringify(newEnvData),(err)=>{
-                                    if(!err) r.data='started';
-                                    else r.error='error starting';
-                                    res.writeHead(200, {'Content-Type': 'application/json'});
-                                    res.write(JSON.stringify(r));
-                                    return res.end();
-                                });
+                                r.data='started';
+                                res.writeHead(200, {'Content-Type': 'application/json'});
+                                res.write(JSON.stringify(r));
+                                return res.end();
                             }
                             else {
                                 r.data='started';

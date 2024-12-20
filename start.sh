@@ -14,4 +14,4 @@ pm2 start stats.js -o $BASE_DIR/logs/stats-out.log -e $BASE_DIR/logs/stats-err.l
 pm2 start chat.js -o $BASE_DIR/logs/chat-out.log -e $BASE_DIR/logs/chat-err.log
 pm2 start rag.js -o $BASE_DIR/logs/rag-out.log -e $BASE_DIR/logs/rag-err.log
 pm2 save
-node server.js
+node server.js > $BASE_DIR/logs/server-out.log 2> $BASE_DIR/logs/server-err.log

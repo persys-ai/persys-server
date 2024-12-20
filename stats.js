@@ -6,7 +6,6 @@ import { config, validateConfig } from './config/env.js';
 
 validateConfig();
 
-
 const baseDir=config.baseDir;
 const peerServer=p.PeerServer({port:4000,path:"/stats"});
 
