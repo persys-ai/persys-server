@@ -5,14 +5,16 @@ import { config, validateConfig } from './config/env.js';
 
 validateConfig();
 
-const host=config.host;
+const chatPort=config.chatPort;
 const baseDir=config.baseDir;
+const ollamaHost=config.ollamaHost;
+const ollamaPort=config.ollamaPort;
 const modelV=config.modelV;
 const chatDir=baseDir+'/chat';
 const limiter=-4;
 
-const ollama=new Ollama({host:'http://'+host+':11434'});
-const peerServer=p.PeerServer({port:9000,path:"/chat"});
+const ollama=new Ollama({host:'http://'+ollamaHost+':'+ollamaPort});
+const peerServer=p.PeerServer({port:chatPort,path:"/chat"});
 peerServer.on('connection',(client) => {
     const tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));
     if(client.id && tokens.findIndex(x=>x.t===client.id)>-1) {

@@ -7,18 +7,19 @@ import { config, validateConfig } from './config/env.js';
 
 validateConfig();
 
-
-const host=config.host;
+const ragPort=config.ragPort;
 const baseDir=config.baseDir;
 const modelV=config.modelV;
+const ollamaHost=config.ollamaHost;
+const ollamaPort=config.ollamaPort;
 const embedModel=config.embedModel;
 const chromaHost=config.chromaHost;
 const chromaPort=config.chromaPort;
 const embeddingsDir=baseDir+'/embeddings';
 
-const ollama=new Ollama({host:'http://'+host+':11434'});
-const chroma=new ChromaClient({path:"http://" + chromaHost + ":" + chromaPort});
-const peerServer=p.PeerServer({port:7000,path:"/rag"});
+const ollama=new Ollama({host:'http://'+ollamaHost+':'+ollamaPort});
+const chroma=new ChromaClient({path:"http://"+chromaHost+":"+chromaPort});
+const peerServer=p.PeerServer({port:ragPort,path:"/rag"});
 peerServer.on('connection',(client)=>{
     const tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));
     if(client.id && tokens.findIndex(x=>x.t===client.id)>-1) {

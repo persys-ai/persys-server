@@ -7,10 +7,15 @@ dotenv.config();
 var config = {
   baseDir: process.env.BASE_DIR || '/data',
   host: process.env.HOST || 'localhost',
-  modelV: process.env.MODEL_V || 'llama3.2:3b',
+  modelV: process.env.MODEL_V || 'llama3.2:1b',
   embedModel: process.env.EMBED_MODEL || 'nomic-embed-text',
-  port: parseInt(process.env.PORT, 10) || 3000,
-  chromaHost: process.env.CHROMA_HOST || 'localhost',
+  port: parseInt(process.env.SERVER_PORT, 10) || 3000,
+  chatPort: parseInt(process.env.CHAT_PORT) || 9000,
+  ragPort: parseInt(process.env.RAG_PORT, 10) || 7000,
+  monitorPort: parseInt(process.env.MONITOR_PORT, 10) || 4000,
+  ollamaHost: process.env.OLLAMA_HOST || 'ollama',
+  ollamaPort: parseInt(process.env.OLLAMA_PORT, 10) || 11434,
+  chromaHost: process.env.CHROMA_HOST || 'chromadb',
   chromaPort: parseInt(process.env.CHROMA_PORT, 10) || 8000,
   deviceName:process.env.DEVICE_NAME || 'my-device',
   serialNumber:process.env.SERIAL_NUMBER || 'device-serial-no',
@@ -20,7 +25,7 @@ var config = {
 
 // Create a function to validate required env vars
 const validateConfig = () => {
-  const required = ['BASE_DIR', 'HOST', 'MODEL_V', 'EMBED_MODEL', 'PORT'];
+  const required = ['BASE_DIR', 'HOST', 'MODEL_V', 'EMBED_MODEL', 'SERVER_PORT'];
   const missing = required.filter(key => !process.env[key]);
   
   if (missing.length > 0) {

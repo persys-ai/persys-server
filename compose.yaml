@@ -23,7 +23,7 @@ services:
       - "7000:7000"
       - "9000:9000"
     volumes:
-      - /path/to/data:/data
+      - /Users/aman/Documents/AppData:/data
     env_file: .env
 
 volumes:
