@@ -23,7 +23,7 @@ services:
       - "7000:7000"
       - "9000:9000"
     volumes:
-      - /data:/data
+      - /path/to/data:/data
     env_file: .env
 
 volumes:
