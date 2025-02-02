@@ -6,8 +6,9 @@ import { config, validateConfig } from './config/env.js';
 
 validateConfig();
 
+const monitorPort=config.monitorPort;
 const baseDir=config.baseDir;
-const peerServer=p.PeerServer({port:4000,path:"/stats"});
+const peerServer=p.PeerServer({port:monitorPort,path:"/stats"});
 
 peerServer.on('connection',(client) => {
     const tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));

@@ -58,6 +58,8 @@ const server = http.createServer((req, res)=>{
         let tokens=JSON.parse(fs.readFileSync(baseDir+'/t.json'));
         if((req.headers['public-token'] && tokens.findIndex(x=>x.t===req.headers['public-token'])>-1) || (s.get('publicToken') && tokens.findIndex(x=>x.t===s.get('publicToken'))>-1)) {
             const host=config.host;
+            const ollamaHost=config.ollamaHost;
+	        const ollamaPort=config.ollamaPort;
             const modelV=config.modelV;
             const embedModel=config.embedModel;
             //
@@ -70,7 +72,7 @@ const server = http.createServer((req, res)=>{
             const logsDir=baseDir+'/logs';
             const appsDir=baseDir+'/apps';
             //
-            const ollama=new Ollama({host:'http://'+host+':11434'});
+	        const ollama=new Ollama({host:'http://'+ollamaHost+':'+ollamaPort});
             //
             //
             if(!fs.existsSync(baseDir)) fs.mkdirSync(baseDir);
@@ -1452,7 +1454,7 @@ const server = http.createServer((req, res)=>{
                                     });
                                 })
                                 .catch((error) => {
-                                    r.error=error;
+                                    r.error=JSON.stringify(error);
                                     res.writeHead(200,{'Content-Type':'application/json'});
                                     res.write(JSON.stringify(r));
                                     return res.end();
@@ -1472,14 +1474,14 @@ const server = http.createServer((req, res)=>{
                                             });
                                         })
                                         .catch((error) => {
-                                            r.error=error;
+                                            r.error=JSON.stringify(error);
                                             res.writeHead(200,{'Content-Type':'application/json'});
                                             res.write(JSON.stringify(r));
                                             return res.end();
                                         });
                                 })
                                 .catch((err)=>{
-                                    r.error=err;
+                                    r.error=JSON.stringify(err);
                                     res.writeHead(200,{'Content-Type':'application/json'});
                                     res.write(JSON.stringify(r));
                                     return res.end();
