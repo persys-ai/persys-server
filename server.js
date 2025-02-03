@@ -819,11 +819,11 @@ const server = http.createServer((req, res)=>{
                             `;
                         async function create() {
                             await ollama.create({model:payload.name,modelfile:modelfile});
-                            if(payload.details.family==='llama') await ollama.generate({model:payload.name,prompt:'.'});
+                            if(['llama','qwen2'].indexOf(payload.details.family)>-1) await ollama.generate({model:payload.name,prompt:'.'});
                         }
                         create()
                             .then(()=>{
-                            if(payload.details.family==='llama') {
+                            if(['llama','qwen2'].indexOf(payload.details.family)>-1) {
                                 setConfig({modelV: payload.name});
                                 r.data='started';
                                 res.writeHead(200, {'Content-Type': 'application/json'});

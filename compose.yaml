@@ -23,7 +23,9 @@ services:
       - "7000:7000"
       - "9000:9000"
     volumes:
-      - /path/to/data:/data
+      - type: bind
+        source: ${DATA_PATH}
+        target: /data
     env_file: .env
 
 volumes:
