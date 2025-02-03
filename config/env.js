@@ -20,7 +20,8 @@ var config = {
   deviceName:process.env.DEVICE_NAME || 'my-device',
   serialNumber:process.env.SERIAL_NUMBER || 'device-serial-no',
   publicKeyV:process.env.PUBLIC_KEY_VERSION || 'persys-pub-100.pem',
-  firmwareVersion:process.env.FIRMWARE_VERSION || '1.0.1'
+  firmwareVersion:process.env.FIRMWARE_VERSION || '1.0.1',
+  chatLimiter:process.env.CHAT_LIMITER || -4,
 };
 
 // Create a function to validate required env vars

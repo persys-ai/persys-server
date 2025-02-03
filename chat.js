@@ -11,7 +11,7 @@ const ollamaHost=config.ollamaHost;
 const ollamaPort=config.ollamaPort;
 const modelV=config.modelV;
 const chatDir=baseDir+'/chat';
-const limiter=-4;
+const limiter=config.chatLimiter;
 
 const ollama=new Ollama({host:'http://'+ollamaHost+':'+ollamaPort});
 const peerServer=p.PeerServer({port:chatPort,path:"/chat"});

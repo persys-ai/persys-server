@@ -5,5 +5,5 @@ device.stl
 install.sh
 env.json
 .env
-wifi.py
 update.sh
+core/
