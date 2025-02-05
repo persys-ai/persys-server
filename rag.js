@@ -54,12 +54,12 @@ peerServer.on('connection',(client)=>{
                     async function query() {
                         return await result.collection.query({
                             queryEmbeddings:[result.em.embedding],
-                            nResults:1
+                            nResults:15
                         });
                     }
                     query()
                         .then(queryData=>{
-                            ollama.generate({model:modelV,prompt:"Using this data: "+queryData['documents'][0][0]+". Respond to this prompt: "+prompt,stream:true}).then(
+                            ollama.generate({model:modelV,prompt:"Using this data: "+queryData['documents'][0]+". Respond to this prompt: "+prompt,stream:true}).then(
                                 async(stream)=>{
                                     for await(const chunk of stream) {
                                         reply=reply+chunk.response;
